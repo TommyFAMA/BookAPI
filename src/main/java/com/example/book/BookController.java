@@ -1,32 +1,49 @@
 package com.example.book;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
 @RequestMapping("/books")
 public class BookController {
-    private List<Book> books;
 
-    public BookController() {
-        System.out.println("BookController() called...");
-        books = new ArrayList<>();
-        books.add(new Book(1,"Hacking with Spring Boot 2.3","Greg L. Turnquist"));
-        books.add(new Book(2,"97 Things Every Java Programmer Should Know", "Kevlin Henney and Trisha Gee"));
-        books.add(new Book(3,"Spring Boot: Up and Running","Greg L. Turnquist "));
-    }
+    @Autowired
+    private BookService bookservice;
 
     @GetMapping
     public List<Book> list() {
-        return books;
+        return bookservice.list();
+
     }
 
     @GetMapping("/{id}")
-    public Book get(@PathVariable int id) {
-        for (Book i: books){
-            if (i.getBookid()==id)
-                return i;
-        }
-        return null; //book not found
+    public ResponseEntity<?> getBook(@PathVariable int id) {
+        Book b = bookservice.get(id);
+        if (b != null)
+            return ResponseEntity
+                    .status(HttpStatus.OK) // return 200
+                    .body(b);
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND) // return HTTP sstatus code 404
+                    .body("Book not found!");
+    }
+
+    @PostMapping
+    public void create(@RequestBody Book book) {   //delegation
+        bookservice.create(book);
+    }
+
+    @PutMapping
+    public void update(@RequestBody Book book) {
+        bookservice.update(book);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id) {
+        bookservice.delete(id);
     }
 }

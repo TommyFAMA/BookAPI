@@ -1,7 +1,28 @@
-GET http://localhost:8080/books
+POST http://localhost:8080/books
+Content-Type: application/json
+{"bookid":4,"title": "Spring in Action","author": "Craig Walls"}
 
 HTTP/1.1 200  - OK
-content-type: application/json
-transfer-encoding: chunked
-date: Thu, 03 Mar 2022 19:03:35 GMT
+content-length: 0
+date: Thu, 03 Mar 2022 19:27:06 GMT
+connection: close
+
+###
+
+GET http://localhost:8080/books
+
+###
+
+PUT  http://localhost:8080/books
+Content-Type: application/json
+
+{"bookid": 4,"title": "Spring in Acton 2nd Ed","author": "Craig Walls"}
+
+###
+
+DELETE  http://localhost:8080/books/1
+
+HTTP/1.1 200  - OK
+content-length: 0
+date: Thu, 03 Mar 2022 19:28:50 GMT
 connection: close
